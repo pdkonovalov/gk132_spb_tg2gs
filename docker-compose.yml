@@ -1,0 +1,8 @@
+services:
+  gk132_spb_tg2gs:
+    container_name: gk132_spb_tg2gs
+    env_file: "config.env"
+    image: pdkonovalov/gk132_spb_tg2gs
+    restart: unless-stopped
+    volumes:
+      - ./google_service_account_credentials.json:/google_service_account_credentials.json:ro

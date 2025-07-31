@@ -1,0 +1,9 @@
+LogLevel:  # debug, prod
+
+TelegramTimezone: # Europe/Moscow
+TelegramBotToken: 
+TelegramChatID: 
+
+GoogleSheetsServiceAccountCredentialsFile: # google_service_account_credentials.json
+GoogleSheetsSpreadsheetID: 
+GoogleSheetsSheet: 
