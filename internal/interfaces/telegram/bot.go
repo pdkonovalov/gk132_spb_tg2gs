@@ -66,6 +66,8 @@ func setupRouter(
 	if err != nil {
 		return fmt.Errorf("Failed create handler: %s", err)
 	}
+
+	b.Handle(tele.OnText, handler.FetchProblem)
 	b.Handle(tele.OnChannelPost, handler.FetchProblem)
 
 	return nil
