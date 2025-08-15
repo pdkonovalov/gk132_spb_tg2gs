@@ -17,7 +17,9 @@ type Config struct {
 	LogLevel string `yaml:"LogLevel" env:"LOG_LEVEL"`
 
 	TelegramTimezone string `yaml:"TelegramTimezone" env:"TELEGRAM_TIMEZONE"`
-	TelegramBotToken string `yaml:"TelegramBotToken" env:"TELEGRAM_BOT_TOKEN"`
+	TelegramPhone    string `yaml:"TelegramPhone" env:"TELEGRAM_PHONE"`
+	TelegramAppHash  string `yaml:"TelegramAppHash" env:"TELEGRAM_APP_HASH"`
+	TelegramAppID    int    `yaml:"TelegramAppID" env:"TELEGRAM_APP_ID"`
 	TelegramChatID   int64  `yaml:"TelegramChatID" env:"TELEGRAM_CHAT_ID"`
 
 	GoogleSheetsServiceAccountCredentialsFile string `yaml:"GoogleSheetsServiceAccountCredentialsFile" env:"GOOGLE_SHEETS_SERVICE_ACCOUNT_CREDENTIALS_FILE"`
@@ -47,7 +49,8 @@ func (cfg *Config) StringSecureMasked() (string, error) {
 	cfg_masked := new(Config)
 	*cfg_masked = *cfg
 
-	cfg_masked.TelegramBotToken = strings.Repeat("*", len(cfg_masked.TelegramBotToken))
+	cfg_masked.TelegramAppHash = strings.Repeat("*", len(cfg_masked.TelegramAppHash))
+	cfg_masked.TelegramAppID = 999999999
 
 	cfg_masked_yml, err := yaml.Marshal(cfg_masked)
 	if err != nil {

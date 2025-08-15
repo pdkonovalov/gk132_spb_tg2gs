@@ -4,5 +4,19 @@ services:
     env_file: "config.env"
     image: pdkonovalov/gk132_spb_tg2gs
     restart: unless-stopped
+    stdin_open: true
+    tty: true
     volumes:
       - ./google_service_account_credentials.json:/google_service_account_credentials.json:ro
+      - telegram_session_data:/data/telegram/session
+  watchtower:
+    container_name: watchtower
+    env_file: "config.env"
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 60
+    restart: unless-stopped
+volumes:
+  telegram_session_data:
+    name: gk132_spb_tg2gs_telegram_session_data

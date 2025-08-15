@@ -1,20 +1,19 @@
 FROM golang:1.24 AS build-stage
 
-WORKDIR /app
+WORKDIR /go/src/app
 
-COPY go.mod go.sum ./
+COPY . .
+
 RUN go mod download
 
-COPY . ./
+RUN CGO_ENABLED=0 go build -o /go/bin/app
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /gk132_spb_tg2gs
+RUN mkdir /go/bin/data
 
-FROM gcr.io/distroless/static-debian12 AS release-stage
+FROM gcr.io/distroless/static-debian12
 
-WORKDIR /
+COPY --from=build-stage /go/bin/app /
 
-COPY --from=build-stage /gk132_spb_tg2gs /gk132_spb_tg2gs
+COPY --from=build-stage --chown=:nonroot /go/bin/data /
 
-USER nonroot:nonroot
-
-ENTRYPOINT ["/gk132_spb_tg2gs"]
+CMD ["/app"]

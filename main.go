@@ -37,19 +37,22 @@ func main() {
 
 	log.Print("connect to google sheets successfull")
 
-	log.Print("configure bot...")
+	log.Print("configure telegram client...")
 
-	bot, err := telegram.New(cfg, repo)
+	telegram_client, err := telegram.New(cfg, repo)
 	if err != nil {
-		log.Fatalf("Error init bot: %s", err)
+		log.Fatalf("Error configure telegram client: %s", err)
 	}
 
-	log.Print("configure bot successfull")
-	log.Print("starting bot...")
+	log.Print("configure telegram client successfull")
+	log.Print("starting telegram client...")
 
-	go bot.Start()
+	err = telegram_client.Run()
+	if err != nil {
+		log.Fatalf("Error start telegram client: %s", err)
+	}
 
-	log.Print("bot successfull started")
+	log.Print("telegram client successfull started")
 	log.Print("press ctrl c to shutdown")
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -62,8 +65,11 @@ func main() {
 
 		<-ctx.Done()
 
-		log.Print("shutdown bot...")
-		bot.Stop()
+		log.Print("shutdown telegram client...")
+		telegram_client.Stop()
+		if err != nil {
+			log.Printf("failed shutdown telegram client: %s", err)
+		}
 
 		log.Print("close google sheets connection...")
 		err := repo.Close(ctx)
