@@ -172,9 +172,20 @@ func New(cfg *config.Config, repo repository.Repository) (*Client, error) {
 			return nil
 		}
 
-		err := repo.Create(problem)
-		if err != nil {
-			return fmt.Errorf("Failed write problem '%s' to google sheets: %s", msg.Message, err)
+		if problem == nil {
+			return fmt.Errorf("Message '%s' is valid problem message, but parsed problem is nil", msg.Message)
+		}
+
+		if !problem.IsResolved {
+			err := repo.Create(problem)
+			if err != nil {
+				return fmt.Errorf("Failed write problem '%s' to google sheets: %s", msg.Message, err)
+			}
+		} else {
+			err := repo.Update(problem)
+			if err != nil {
+				return fmt.Errorf("Failed write problem '%s' to google sheets: %s", msg.Message, err)
+			}
 		}
 
 		log.Printf("Problem '%s' successfully writed to google sheets", msg.Message)
